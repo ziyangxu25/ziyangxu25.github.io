@@ -12,7 +12,7 @@
   type: time_table
   contents:
     - title: Master of Science
-      institution: The Ohio State University, Ohio, USA
+      institution: The Ohio State University, Columbus, Ohio, USA
       year: 2023
       description:
         - Description 1.
@@ -22,7 +22,7 @@
             - Sub-description 1.
             - Sub-description 2.
     - title: Bachelor of Engineering
-      institution: Nantong University, Jiangsu, China
+      institution: Nantong University, Nantong, Jiangsu, China
       year: 2020
       description:
         - Description 1.
