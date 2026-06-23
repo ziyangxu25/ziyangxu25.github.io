@@ -25,4 +25,4 @@ latest_posts:
   limit: 3
 ---
 
-I'm currently working as a Research Imaging Analyst at the University of Nebraska Medical Center (UNMC). My research interests lie at the intersection of artificial intelligence and computational neuroscience.
+I'm currently an incoming Ph.D. Student of the University of Illinois Urbana-Champaign (UIUC). My research interests lie at the intersection of artificial intelligence and computational neuroscience.
