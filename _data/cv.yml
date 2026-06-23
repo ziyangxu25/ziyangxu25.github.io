@@ -4,7 +4,7 @@
     - name: Full Name
       value: Ziyang Xu
     - name: Email
-      value: ziyangxu25@gmail.com
+      value: ziyangxu25(at)gmail(dot)com
     - name: Languages
       value: Chinese (Mandarin / Wuxi Dialect), English
 
@@ -18,112 +18,36 @@
         - Incoming PhD student, Fall 2026.
     - title: Master of Science in Electrical and Computer Engineering
       institution: The Ohio State University, Columbus, Ohio, USA
-      year: 2021 - 2023
+      year: 2023
       description:
-        - "GPA: 3.71 / 4.0"
         - "Thesis: Land Cover Classification with Low-resolution Labels"
-    - title: Exchange Program in Computer Science
-      institution: Carleton University, Ottawa, Ontario, Canada
-      year: 2017 - 2018
-      description:
-        - "GPA: 11.5 / 12"
     - title: Bachelor of Engineering in Electrical Engineering and Intelligent Control
       institution: Nantong University, Nantong, Jiangsu, China
-      year: 2016 - 2020
-      description:
-        - "GPA: 85.8 / 100"
+      year: 2020
 
 - title: Research Experience
   type: time_table
   contents:
     - title: Research Imaging Analyst
       institution: University of Nebraska Medical Center (UNMC), Omaha, Nebraska, USA
-      year: 2023 - now
-      description:
-        - title: Segmentation of the Bed Nucleus of the Stria Terminalis (BNST), Feb. 2024 – Present
-          contents:
-            - Applied nnUNet, 3D-TransUNet, and MedSAM to segment BNST with multi-modality MRI.
-            - Applying a domain transformation model to harmonize MRI images across datasets.
-        - title: Classifier design for distinguishing alcohol use disorder, Dec. 2023 – Feb. 2024
-          contents:
-            - Applied SVM with random projection for classifying patients with alcohol use disorder vs. healthy controls.
-            - Applied SHAP to identify the most important brain network features.
-        - title: Analysis of functional connectivity alterations in cocaine-use disorder, Feb. – Sep. 2024
-          contents:
-            - Applied SVM with independent component analysis over triple-network-model brain networks.
-            - Validated clinical significance and explored functional connectivity changes between groups.
-        - title: Review on AI-based brain age estimation and related diseases, May – Oct. 2024
-          contents:
-            - Prepared the section on brain age estimation methods.
-            - Compiled a summary table of ML applications for brain age prediction.
-    - title: Graduate Research Assistant
-      institution: The Ohio State University, Columbus, Ohio, USA
-      year: 2022 - 2023
-      description:
-        - title: Land cover classification with low-resolution labels
-          contents:
-            - Refined low-resolution labels using Markov Random Field analysis and graph cut methods.
-            - Applied Random Forest for pixel selection and pseudo-label generation.
-            - Trained and compared FCN, U-Net, DeepLabV3+, and HRNet on pseudo-labels.
-    - title: Undergraduate Research Assistant
-      institution: Nantong University, Nantong, Jiangsu, China
-      year: 2018 - 2020
-      description:
-        - title: Vascular region segmentation of CT enterography based on Res-U-Net, Jul. 2019 – May 2020
-          contents:
-            - Improved U-Net with residual learning units.
-            - Enhanced ROI detection and optimized patch size for reduced training time.
-        - title: Gland isolation in multi-staining pathological images based on U-Net, Dec. 2018 – Jun. 2019
-          contents:
-            - Performed optical density transformation and trained U-Net for gland segmentation.
-            - Pixel-level analysis to improve separation of different gland types.
-
-- title: Industry Experience
-  type: time_table
-  contents:
-    - title: Engineer Intern
-      institution: VisionX LLC, San Jose, California, USA
-      year: 2023
-      description:
-        - Developed a shoplifting detection system using YOLO-v8/YOLONAS for tracking, OpenPose + DeepSORT for skeletal motion extraction, and a motion-based algorithm to detect theft behaviors.
-    - title: Engineer Intern
-      institution: Wuxi Kunpeng Intelligent Image Technology Co., Ltd, Wuxi, Jiangsu, China
-      year: 2020
-      description:
-        - Trained YOLO-v4 for door corner localization under occlusion; optimized network accuracy and processing time; gained experience in model encapsulation and deployment.
+      year: 2023 - 2026
 
 - title: Honors and Awards
   type: time_table
   contents:
     - year: 2025
       items:
-        - Best Poster Award, CoNDA Center Colloquium (Mar. 2025)
+        - Best Poster Award, CoNDA Center Colloquium, UNMC
     - year: 2016, 2017
       items:
-        - Scholarship for Outstanding Academic Performance, Nantong University (top 5%)
-        - Merit Student, Nantong University (top 10%)
-        - First Prize in the China Robot Competition (Oct. 2016)
-
-- title: Skills
-  type: nested_list
-  contents:
-    - title: Programming
-      items:
-        - Python, MATLAB, PyTorch, Scikit-learn
-    - title: Neuroimaging Tools
-      items:
-        - FSL, FreeSurfer, fMRIPrep, DPARSF
-    - title: Expertise
-      items:
-        - Image Processing, Medical Imaging, Machine Learning, Deep Learning, Neuroimaging, Functional Connectivity
+        - Scholarship for Outstanding Academic Performance, Nantong University
+        - Merit Student, Nantong University
+        - First Prize in the China Robot Competition
 
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Medical Image Analysis
-      items:
-        - Deep learning segmentation (nnU-Net, 3D-TransUNet, MedSAM)
-        - Semi-supervised and domain adaptation methods
+    - title: Computational Neuroscience
     - title: Computational Neuroscience
       items:
         - Brain structure morphometry and functional connectivity
