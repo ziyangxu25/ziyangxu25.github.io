@@ -1,0 +1,55 @@
+name: Update Publications from Google Scholar
+
+on:
+  schedule:
+    - cron: "0 2 * * 1" # Every Monday at 2am UTC (after citations workflow at midnight)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-publications:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml scholarly
+
+      - name: Run publication sync script
+        id: run_sync
+        shell: bash
+        run: |
+          set +e
+          echo "Syncing publications from Google Scholar..."
+          timeout 180 python bin/update_scholar_publications.py
+          status=$?
+          set -e
+          if [ $status -eq 0 ]; then
+            echo "Publication sync succeeded." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Publication sync failed with exit code $status (Google Scholar may have blocked the request)." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Configure Git
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+
+      - name: Commit and push if changed
+        run: |
+          git add _bibliography/papers.bib
+          git diff --staged --quiet || (
+            echo "New publications detected — committing..."
+            git commit -m "Auto-add publications from Google Scholar"
+            git push
+          )

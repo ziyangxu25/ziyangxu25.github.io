@@ -88,6 +88,10 @@ jobs:
           valueFile: "_config.yml"
           propertyPath: "giscus.repo"
           value: ${{ github.repository }}
+      - name: Fix ImageMagick Policy 🔧
+        run: |
+          sudo sed -i 's|<policy domain="coder" rights="none" pattern="PDF" />||g' /etc/ImageMagick-6/policy.xml || true
+          sudo sed -i 's|<policy domain="coder" rights="none" pattern="EPS" />||g' /etc/ImageMagick-6/policy.xml || true
       - name: Install and Build 🔧
         run: |
           sudo apt-get update && sudo apt-get install -y imagemagick

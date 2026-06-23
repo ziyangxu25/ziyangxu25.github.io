@@ -12,6 +12,8 @@ on:
 
 jobs:
   check:
+    # only run on the main al-folio repo, not user forks
+    if: github.repository == 'alshedivat/al-folio'
     # available images: https://github.com/actions/runner-images#available-images
     runs-on: ubuntu-latest
     steps:

@@ -11,7 +11,7 @@ profile:
   more_info: >
     <p>This photo was taken in Washington, D.C., during the cherry blossom season in March 2025.</p>
 
-selected_papers: false # includes a list of papers marked as "selected={true}"
+selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 
 announcements:
