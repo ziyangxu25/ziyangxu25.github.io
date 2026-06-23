@@ -18,7 +18,7 @@ ninja.data = [{
           },
         },{id: "nav-cv",
           title: "cv",
-          description: "Curriculum Vitae of Ziyang Xu.",
+          description: "",
           section: "Navigation",
           handler: () => {
             window.location.href = "/cv/";
