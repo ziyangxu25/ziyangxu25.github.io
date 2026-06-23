@@ -4,7 +4,6 @@ permalink: /cv/
 title: cv
 nav: true
 nav_order: 5
-description: Curriculum Vitae of Ziyang Xu.
 toc:
   sidebar: left
 ---
