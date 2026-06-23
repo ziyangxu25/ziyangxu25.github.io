@@ -12,7 +12,7 @@
   type: time_table
   contents:
     - title: PhD in Electrical and Computer Engineering
-      institution: University of Illinois Urbana-Champaign (UIUC), Urbana, Illinois, USA
+      institution: University of Illinois Urbana-Champaign, Urbana, Illinois, USA
       year: 2026 - now
       description:
         - Incoming PhD student, Fall 2026.
@@ -47,7 +47,6 @@
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Computational Neuroscience
     - title: Computational Neuroscience
       items:
         - Brain structure morphometry and functional connectivity
