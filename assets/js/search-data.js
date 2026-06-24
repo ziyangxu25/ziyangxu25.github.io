@@ -29,6 +29,9 @@ ninja.data = [{
           section: "News",},{id: "news-i-just-accepted-the-offer-to-the-ece-phd-program-of-the-university-of-illinois-urbana-champaign-uiuc-thank-everyone-for-your-help-during-this-application-season",
           title: 'I just accepted the offer to the ECE PhD program of the University...',
           description: "",
+          section: "News",},{id: "news-on-board-boston-i-m-so-excited-to-start-the-summer-term-at-boston-university",
+          title: 'On board Boston! I’m so excited to start the Summer Term at Boston...',
+          description: "",
           section: "News",},{
         id: 'social-email',
         title: 'email',
