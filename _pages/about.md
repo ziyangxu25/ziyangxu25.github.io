@@ -25,4 +25,4 @@ latest_posts:
   limit: 3
 ---
 
-I'm currently an incoming Ph.D. Student of the University of Illinois Urbana-Champaign (UIUC). My research interests lie at the intersection of artificial intelligence and computational neuroscience.
+I'm an incoming Ph.D. Student at the University of Illinois Urbana-Champaign. My research interests lie at the intersection of artificial intelligence and computational neuroscience.
