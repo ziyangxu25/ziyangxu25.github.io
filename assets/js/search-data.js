@@ -32,6 +32,9 @@ ninja.data = [{
           section: "News",},{id: "news-on-board-boston-i-m-so-excited-to-start-the-summer-term-at-boston-university",
           title: 'On board Boston! I’m so excited to start the Summer Term at Boston...',
           description: "",
+          section: "News",},{id: "news-on-board-champaign-urbana-i-look-forward-to-this-new-chapter-as-a-ph-d-student-at-uiuc",
+          title: 'On board Champaign-Urbana! I look forward to this new chapter as a Ph.D....',
+          description: "",
           section: "News",},{
         id: 'social-email',
         title: 'email',
