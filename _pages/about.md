@@ -25,4 +25,4 @@ latest_posts:
   limit: 3
 ---
 
-I'm an incoming Ph.D. Student at the University of Illinois Urbana-Champaign. My research interests lie at the intersection of artificial intelligence and computational neuroscience.
+I'm a Ph.D. Student at the University of Illinois Urbana-Champaign in the Department of Electrical and Computer Engineering under the supervision of [Dr. Dean Pospisil](https://sites.google.com/view/dean-pospisil/research). My research interests lie at the intersection of artificial intelligence and computational neuroscience.
