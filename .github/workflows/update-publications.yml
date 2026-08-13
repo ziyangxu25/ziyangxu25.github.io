@@ -31,13 +31,18 @@ jobs:
         run: |
           set +e
           echo "Syncing publications from Google Scholar..."
-          timeout 180 python bin/update_scholar_publications.py
-          status=$?
+          timeout 180 python bin/update_scholar_publications.py 2>&1 | tee sync_output.log
+          status=${PIPESTATUS[0]}
           set -e
           if [ $status -eq 0 ]; then
             echo "Publication sync succeeded." >> $GITHUB_STEP_SUMMARY
           else
             echo "Publication sync failed with exit code $status (Google Scholar may have blocked the request)." >> $GITHUB_STEP_SUMMARY
+          fi
+          if grep -q "skipped-incomplete" sync_output.log; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Some publications were skipped due to incomplete Scholar metadata** (not added to papers.bib, will retry next run):" >> $GITHUB_STEP_SUMMARY
+            grep "skipped-incomplete" sync_output.log | sed 's/^  \[skipped-incomplete\] /- /' >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Configure Git

@@ -68,12 +68,32 @@ def extract_existing_keys(bib_content: str) -> set:
     return set(re.findall(r"@\w+\{(\w+),", bib_content))
 
 
+def incompleteness_reasons(bib: dict) -> list[str]:
+    """Return why a Scholar publication's metadata isn't usable, or [] if it's fine.
+
+    Scholar's author-level fetch often returns a shallow record for a given
+    publication (no author string, no year) unless that entry is deep-filled
+    individually. Rather than writing "Unknown Author" / "????" straight into
+    papers.bib, we skip those and retry on the next scheduled run.
+    """
+    reasons = []
+    if not bib.get("title", "").strip():
+        reasons.append("missing title")
+    author = bib.get("author", "").strip()
+    if not author or author.lower() == "unknown author":
+        reasons.append("missing author")
+    year = str(bib.get("pub_year", "")).strip()
+    if not year.isdigit():
+        reasons.append("missing/invalid year")
+    return reasons
+
+
 def pub_to_bibtex_stub(pub: dict, existing_keys: set) -> tuple[str, str]:
     """Convert a scholarly publication dict to a minimal BibTeX entry."""
     bib = pub.get("bib", {})
-    title = bib.get("title", "Unknown Title").replace("{", "").replace("}", "")
-    authors = bib.get("author", "Unknown Author")
-    year = str(bib.get("pub_year", "????"))
+    title = bib.get("title", "").replace("{", "").replace("}", "")
+    authors = bib.get("author", "")
+    year = str(bib.get("pub_year", ""))
     venue = bib.get("venue", "")
     abstract = bib.get("abstract", "")
 
@@ -133,16 +153,32 @@ def main() -> None:
     print(f"Found {len(publications)} publications on Google Scholar.")
 
     new_entries = []
+    skipped = []
     for pub in publications:
-        raw_title = pub.get("bib", {}).get("title", "")
+        bib = pub.get("bib", {})
+        raw_title = bib.get("title", "")
         norm_title = re.sub(r"\s+", " ", raw_title).lower().strip()
-        if norm_title in existing_titles:
+        if norm_title and norm_title in existing_titles:
             print(f"  [exists] {raw_title}")
             continue
+
+        reasons = incompleteness_reasons(bib)
+        if reasons:
+            label = raw_title or "(untitled)"
+            print(f"  [skipped-incomplete] {label} -- {', '.join(reasons)}")
+            skipped.append(f"{label} -- {', '.join(reasons)}")
+            continue
+
         print(f"  [new]    {raw_title}")
         _, entry = pub_to_bibtex_stub(pub, existing_keys)
         new_entries.append(entry)
         existing_titles.add(norm_title)
+
+    if skipped:
+        print(f"\n{len(skipped)} publication(s) skipped due to incomplete Scholar metadata "
+              f"(will retry next run; add manually if this persists):")
+        for line in skipped:
+            print(f"  - {line}")
 
     if not new_entries:
         print("No new publications to add.")
