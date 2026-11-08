@@ -161,7 +161,13 @@ def pub_to_bibtex_stub(pub: dict, existing_keys: set) -> tuple[str, str]:
         m = re.search(r"arxiv\.(\d{4}\.\d{4,5})", bib.get("doi", ""), re.IGNORECASE)
         if m:
             lines.append(f"  html = {{https://arxiv.org/abs/{m.group(1)}}},")
-        lines.append("  note = {Preprint},")
+        server = "Preprint"
+        hay = f"{venue} {bib.get('doi', '')}".lower()
+        for name in ("arXiv", "bioRxiv", "medRxiv", "PsyArXiv", "SSRN", "Research Square"):
+            if name.lower() in hay:
+                server = name
+                break
+        lines.append(f"  note = {{{server}}},")
     elif bib.get("journal"):
         lines.append(f"  journal = {{{bib['journal']}}},")
     elif venue:
