@@ -23,7 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pyyaml scholarly
+          pip install pyyaml scholarly "bibtexparser<2"  # scholarly 1.7.x breaks on bibtexparser 2.x
 
       - name: Run publication sync script
         id: run_sync
@@ -44,6 +44,7 @@ jobs:
             echo "**Some publications were skipped due to incomplete Scholar metadata** (not added to papers.bib, will retry next run):" >> $GITHUB_STEP_SUMMARY
             grep "skipped-incomplete" sync_output.log | sed 's/^  \[skipped-incomplete\] /- /' >> $GITHUB_STEP_SUMMARY
           fi
+          exit $status
 
       - name: Configure Git
         run: |

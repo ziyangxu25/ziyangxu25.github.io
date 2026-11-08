@@ -13,9 +13,12 @@ Run manually:  python bin/update_scholar_publications.py
 Runs via:       .github/workflows/update-publications.yml (weekly)
 """
 
+import json
 import os
 import re
 import sys
+import urllib.parse
+import urllib.request
 
 import yaml
 from scholarly import scholarly
@@ -52,8 +55,10 @@ def extract_existing_titles(bib_content: str) -> set:
 
 def make_bibtex_key(authors: str, year: str, existing_keys: set) -> str:
     """Generate a unique BibTeX key like XuEtAl2024."""
-    first = authors.split(" and ")[0].split(",")
-    last_name = first[0].strip().replace(" ", "")
+    first = authors.split(" and ")[0].strip()
+    # Handle both "Last, First" and "First Last"
+    last_name = first.split(",")[0] if "," in first else first.split()[-1]
+    last_name = re.sub(r"[^A-Za-z]", "", last_name).lower()
     base = f"{last_name}{year}"
     key = base
     suffix = 97  # 'a'
@@ -88,6 +93,44 @@ def incompleteness_reasons(bib: dict) -> list[str]:
     return reasons
 
 
+def _norm(title: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", title.lower()).strip()
+
+
+def openalex_lookup(title: str) -> dict:
+    """Fetch metadata for `title` from OpenAlex; return a scholarly-style bib dict or {}.
+
+    Google Scholar serves a bot-verification page for per-publication pages, so
+    scholarly.fill(pub) can't get author lists. OpenAlex is free and keyless.
+    Only an exact (normalized) title match is accepted.
+    """
+    url = "https://api.openalex.org/works?" + urllib.parse.urlencode(
+        {"search": title, "per_page": 5}
+    )
+    req = urllib.request.Request(url, headers={"User-Agent": "personal-website-publication-sync"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        results = json.load(r).get("results", [])
+    for w in results:
+        if _norm(w.get("display_name") or "") != _norm(title):
+            continue
+        authors = [a["author"]["display_name"] for a in w.get("authorships", [])]
+        if not authors:
+            continue
+        source = ((w.get("primary_location") or {}).get("source") or {}).get("display_name") or ""
+        bib = {
+            "title": title,
+            "author": " and ".join(authors),
+            "pub_year": str(w.get("publication_year") or ""),
+            "venue": source,
+        }
+        if w.get("type") == "article" and source:
+            bib["journal"] = source
+        if w.get("doi"):
+            bib["doi"] = w["doi"].replace("https://doi.org/", "")
+        return bib
+    return {}
+
+
 def pub_to_bibtex_stub(pub: dict, existing_keys: set) -> tuple[str, str]:
     """Convert a scholarly publication dict to a minimal BibTeX entry."""
     bib = pub.get("bib", {})
@@ -113,10 +156,19 @@ def pub_to_bibtex_stub(pub: dict, existing_keys: set) -> tuple[str, str]:
     lines.append(f"  author = {{{authors}}},")
     lines.append(f"  year = {{{year}}},")
 
-    if bib.get("journal"):
+    if entry_type == "misc":
+        lines.insert(1, "  abbr = {Preprint},")
+        m = re.search(r"arxiv\.(\d{4}\.\d{4,5})", bib.get("doi", ""), re.IGNORECASE)
+        if m:
+            lines.append(f"  html = {{https://arxiv.org/abs/{m.group(1)}}},")
+        lines.append("  note = {Preprint},")
+    elif bib.get("journal"):
         lines.append(f"  journal = {{{bib['journal']}}},")
     elif venue:
         lines.append(f"  booktitle = {{{venue}}},")
+
+    if bib.get("doi"):
+        lines.append(f"  doi = {{{bib['doi']}}},")
 
     if abstract:
         short_abstract = abstract[:500] + ("..." if len(abstract) > 500 else "")
@@ -163,6 +215,25 @@ def main() -> None:
             continue
 
         reasons = incompleteness_reasons(bib)
+        if reasons:
+            # The author-level fetch returns shallow records (no author list,
+            # sometimes no venue). Deep-fill this one publication and re-check.
+            try:
+                pub = scholarly.fill(pub)
+                bib = pub.get("bib", {})
+                reasons = incompleteness_reasons(bib)
+            except Exception as e:
+                print(f"  [fill-failed] {raw_title} -- {e}")
+        if reasons and raw_title:
+            try:
+                oa = openalex_lookup(raw_title)
+                if oa:
+                    print(f"  [openalex] {raw_title}")
+                    bib = {**bib, **oa}
+                    pub = {**pub, "bib": bib}
+                    reasons = incompleteness_reasons(bib)
+            except Exception as e:
+                print(f"  [openalex-failed] {raw_title} -- {e}")
         if reasons:
             label = raw_title or "(untitled)"
             print(f"  [skipped-incomplete] {label} -- {', '.join(reasons)}")
