@@ -48,7 +48,22 @@
   <!-- Entry bib key -->
   <div id="{{ entry.key }}" class="{% if site.enable_publication_thumbnails %}col-sm-8{% else %}col-sm-10{% endif %}">
     <!-- Title -->
-    <div class="title">{{ entry.title }}</div>
+    {% if entry.doi %}
+      {% assign title_link = entry.doi | prepend: 'https://doi.org/' %}
+    {% elsif entry.html %}
+      {% assign title_link = entry.html %}
+    {% elsif entry.url %}
+      {% assign title_link = entry.url %}
+    {% else %}
+      {% assign title_link = nil %}
+    {% endif %}
+    <div class="title">
+      {%- if title_link -%}
+        <a href="{{ title_link }}" target="_blank" rel="noopener noreferrer">{{ entry.title }}</a>
+      {%- else -%}
+        {{ entry.title }}
+      {%- endif -%}
+    </div>
     <!-- Author -->
     <div class="author">
       {% assign author_array_size = entry.author_array | size %}
